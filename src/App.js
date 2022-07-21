@@ -11,6 +11,11 @@ export default function App() {
  const [two,setTwo]=useState(false);
  const [three,setThree]=useState(false);
  const [four,setFour]=useState(false);
+ const [workspaceName,setWorkspace]=useState('');
+ const [workspaceUrl,setWorkspaceUrl]=useState('');
+ const [feedbackText, setFeedbackText] =useState('');
+ const [activeIndex,setActiveIndex]=useState('');
+ const [eden,setEden]=useState(false);
 
  const handleName=(e)=>{
   setName(e.target.value);
@@ -18,49 +23,86 @@ export default function App() {
  const handleDisplayName=(e)=>{
   setDisplayName(e.target.value);
  }
-
- const handleSubmit=(e)=>{
-  e.preventDefault();
-  setSecondIcon(true);
+ const handleworkspaceName=(e)=>{
+  setWorkspace(e.target.value);
+ }
+ const handleworkspaceUrl=(e)=>{
+  setWorkspaceUrl(e.target.value);
  }
 
- const form_hide_show=(str)=>{
-  console.log(str);
-  switch(str){
-    case 'one':
-      setOne(true);
-      setTwo(false);
-      setThree(false);
-      setFour(false);
-      break;
-    case 'two':
-      setOne(false);
-      setTwo(true);
-      setThree(false);
-      setFour(false);
-      setSecondIcon(true);
-      break;
-    case 'three':
-      setOne(false);
-      setTwo(false);
-      setThree(true);
-      setFour(false);
-      setThirdIcon(true)
-      break;
-    case 'four':
-      setOne(false);
-      setTwo(false);
-      setThree(false);
-      setFour(true);
-      setfourthicon(true);
-      break;   
-      default:break;   
+ let form_data={name:'',display_name:'',workspace_name:'',workspace_url:'',planning:''}
+ 
+const handleSubmitOne=(e)=>{
+  e.preventDefault();
+  if(name===''){
+    setFeedbackText('Please fill Name');
+    return;
+   }
+  else if(displayName===''){
+    setFeedbackText('Please fill Display Name');
+    return;
+   }
+  else{
+    setFeedbackText('');
+    setOne(false);
+    setTwo(true);
+    setSecondIcon(true);
   }
  }
 
+ const handleSubmitTwo=(e)=>{
+  e.preventDefault();
+  if(workspaceName===''){
+    setFeedbackText('Please fill Workspace Name');
+    return;
+   }
+
+  else if(workspaceUrl===''){
+    setFeedbackText('Please fill Workspace Url');
+    return;
+   }
+  else{
+    setFeedbackText('');
+    setTwo(false);
+    setThree(true);
+    setThirdIcon(true)
+  }
+ }
+
+ const handleSubmitThree=(e)=>{
+  e.preventDefault();
+  if(activeIndex===0){
+    setFeedbackText('Please Select Planning');
+    return;
+   }
+  else{
+  setFeedbackText("");
+  form_data.name=name;
+  form_data.display_name=displayName;
+  form_data.workspace_name=workspaceName;
+  form_data.workspace_url=workspaceUrl;
+  if(activeIndex===1){
+    form_data.planning="myself";
+  }
+  else{
+    form_data.planning="team";
+  }
+  console.log(form_data);
+    setThree(false);
+    setFour(true);
+    setfourthicon(true);
+  }
+ }
+const handleSubmitFour=(e)=>{
+  e.preventDefault();
+  setEden(true);
+}
+ const updateRadio=(i)=>{
+  setActiveIndex(i);
+ }
   return (
     <div className="d-flex justify-content-center align-items-center w-100 height-100vh">
-     <div className="container d-flex justify-content-center align-items-center bg-white"> 
+     { !eden &&<div className="container d-flex justify-content-center align-items-center bg-white"> 
      <div className="first flex-direction-col d-flex justify-content-center align-items-center">
       <div className="d-flex"><img src="../logo.svg" alt="logo-img" className="logo-img"/>
       <span className="logo-text">Eden</span> </div>
@@ -82,26 +124,28 @@ export default function App() {
       {one && <>
       <h2><strong>Welcome! First things first..</strong></h2>
       <p>You can always change them later</p>
-      <form className="input-container d-flex m-auto justify-content-center" onSubmit={handleSubmit}>
+      <form className="input-container d-flex m-auto justify-content-center" onSubmit={handleSubmitOne}>
         <div className="input-label"><strong>Full Name</strong> </div>
         <input className='form-input w-100 ' onChange={handleName} value={name} placeholder="Sachin Lokare"/>
         
         <div className="input-label"><strong>Display Name</strong> </div> 
         <input className='form-input w-100 ' onChange={handleDisplayName} value={displayName} placeholder='Sachin'/>
-        <button className="btn btn-blue" onClick={()=>form_hide_show('two')} type='submit'>Create Workspace</button>
+        <button className="btn btn-blue" type='submit'>Create Workspace</button>
+        {!displayName &&<p className="feedback-text">{feedbackText}</p>}
       </form>
       </>}
 
       {two&& <>
       <h2><strong>Let's set a home for all your work</strong></h2>
       <p>You can always create another workspace later</p>
-      <form className="input-container d-flex m-auto justify-content-center" onSubmit={handleSubmit}>
+      <form className="input-container d-flex m-auto justify-content-center" onSubmit={handleSubmitTwo}>
         <div className="input-label"><strong>Workspace Name</strong> </div>
-        <input className='form-input w-100 ' onChange={handleName} value={name} placeholder="Sachin Lokare"/>
+        <input className='form-input w-100 ' onChange={handleworkspaceName} value={workspaceName} placeholder="Sachin_mission"/>
         
         <div className="input-label"><strong>Workspace Url</strong><small> (optional)</small>  </div> 
-        <input className='form-input w-100 ' onChange={handleDisplayName} value={displayName} placeholder='Sachin'/>
-        <button className="btn btn-blue" onClick={()=>form_hide_show('three')} type='submit'>Create Workspace</button>
+        <input className='form-input w-100 ' onChange={handleworkspaceUrl} value={workspaceUrl} placeholder='mission.com'/>
+        <button className="btn btn-blue" type='submit'>Create Workspace</button>
+        {!workspaceUrl &&<p className="feedback-text">{feedbackText}</p>}
       </form>
       </>
       }
@@ -109,20 +153,20 @@ export default function App() {
       {three&& <>
       <h2><strong>How are you planning to use Eden?</strong></h2>
       <p>we'll streamline your setup experience accordingly</p>
-      <form className="input-container d-flex m-auto justify-content-center w-90" onSubmit={handleSubmit}>
+      <form className="input-container d-flex m-auto justify-content-center w-90" onSubmit={handleSubmitThree}>
         <div className="img-container">
-          <div className="img-box">
+          <div className={"img-box "+(activeIndex==1 ? ' img-active':'')} onClick={()=>updateRadio(1)}>
             <img src="../user.svg" alt="user-img"/>
             <p><strong>For Myself</strong></p>
             <p>Write better. Think more clearly. stay organized</p>
           </div>
-          <div className="img-box">
+          <div className={"img-box "+(activeIndex==2 ? ' img-active':'')} onClick={()=>updateRadio(2)}>
             <img src="../groups.svg" alt="groups-img" />
             <p><strong>With My team</strong></p>
             <p>Wikis docs task and project, all in one place</p>
           </div>
         </div>
-        <button className="btn btn-blue" onClick={()=>form_hide_show('four')} type='submit'>Create Workspace</button>
+        <button className="btn btn-blue" type='submit'>Create Workspace</button>
       </form>
       </>
       }
@@ -133,13 +177,16 @@ export default function App() {
       </div>
       <h2><strong>Congratulations, Eren!</strong></h2>
       <p>You have completed onbording, you can start using the Eden!</p>
-      <form className="input-container d-flex m-auto justify-content-center" >
-        <button className="btn btn-blue" onClick={()=>form_hide_show('one')}>Launch Eden</button>
+      <form className="input-container d-flex m-auto justify-content-center" onSubmit={handleSubmitFour}>
+        <button className="btn btn-blue">Launch Eden</button>
       </form>
       </>
       }
      </div>
-     </div>
+     </div>}
+     {eden && <div className="first flex-direction-col d-flex justify-content-center align-items-center">
+      Welcome to Home page
+     </div>}
     </div>
   );
 }
