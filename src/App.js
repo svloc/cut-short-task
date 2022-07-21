@@ -71,7 +71,7 @@ const handleSubmitOne=(e)=>{
 
  const handleSubmitThree=(e)=>{
   e.preventDefault();
-  if(activeIndex===0){
+  if(activeIndex==0){
     setFeedbackText('Please Select Planning');
     return;
    }
@@ -167,6 +167,7 @@ const handleSubmitFour=(e)=>{
           </div>
         </div>
         <button className="btn btn-blue" type='submit'>Create Workspace</button>
+        {activeIndex==0 &&<p className="feedback-text">{feedbackText}</p>}
       </form>
       </>
       }
@@ -175,7 +176,7 @@ const handleSubmitFour=(e)=>{
       <div className="check">
         <img src="../check.svg" alt="check-img" className="check-img" />
       </div>
-      <h2><strong>Congratulations, Eren!</strong></h2>
+      <h2><strong>Congratulations, {name}!</strong></h2>
       <p>You have completed onbording, you can start using the Eden!</p>
       <form className="input-container d-flex m-auto justify-content-center" onSubmit={handleSubmitFour}>
         <button className="btn btn-blue">Launch Eden</button>
@@ -185,7 +186,7 @@ const handleSubmitFour=(e)=>{
      </div>
      </div>}
      {eden && <div className="first flex-direction-col d-flex justify-content-center align-items-center">
-      Welcome to Home page
+      <p>Welcome to Home page <span> {name}</span> </p>
      </div>}
     </div>
   );
