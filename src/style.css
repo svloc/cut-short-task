@@ -186,6 +186,6 @@ input:-internal-autofill-selected {
 }
 
 .feedback-text{
-  margin-top: 3px;
   color: red;
+  font-size: 90%;
 }
